@@ -21,9 +21,9 @@ import yt_dlp
 BOT_TOKEN = os.getenv("BOT_TOKEN")  # TOKEN DI RAILWAY
 OWNER_ID = int(os.getenv("OWNER_ID", "0"))  # OWNER / SUPERUSER dari ENV (Railway)
 
-CHANNEL_MENFESS = -1001234567890
-GROUP_PUBLIK = -1001234567891
-CHANNEL_LOG = -1001234567892
+# channel IDs moved to environment variables
+TARGET_CHANNEL_ID = int(os.getenv("TARGET_CHANNEL_ID", "-1001234567890"))
+CHANNEL_LOG_ID = int(os.getenv("CHANNEL_LOG_ID", "-1001234567892"))
 
 MAX_FILE_MB = 50
 
@@ -92,7 +92,7 @@ def check_limit(user_id, limit_type, max_limit):
     return True
 
 async def log_event(bot, text):
-    await bot.send_message(chat_id=CHANNEL_LOG, text=text)
+    await bot.send_message(chat_id=CHANNEL_LOG_ID, text=text)
 
 def add_chat_stat(user_id):
     today = str(date.today())
@@ -147,7 +147,7 @@ async def menfess_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await msg.reply_text("⛔ Limit harian tercapai")
         return
 
-    for target in (CHANNEL_MENFESS, GROUP_PUBLIK):
+    for target in (TARGET_CHANNEL_ID,):
         try:
             await context.bot.copy_message(
                 chat_id=target,
